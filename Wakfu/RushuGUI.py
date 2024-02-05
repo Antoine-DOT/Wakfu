@@ -46,7 +46,7 @@ def show_selection():
             tk.Label(sub_frame, text=f"Effet: {artefact['Effet']}").pack(anchor='w')
             tk.Label(sub_frame, text=f"Iteration: {artefact['Iteration']}").pack(anchor='w')
             tk.Label(sub_frame, text=f"Placement: {artefact['Placement']}").pack(anchor='w')
-    
+
 # Fonction pour gérer la phase
 def handle_phase():
     global current_phase
@@ -95,9 +95,9 @@ artefacts = {
     10: {"Nom": "Tonnerre", "Passif": "100 Mdistance", "Effet": "Do air sur l'entité le plus éloigné de Rushu", "Iteration": "+1 entité par tour", "Placement": "Tank/invoc éloigné de Rushu"},
     11: {"Nom": "Obscurité", "Passif": "15DF côté", "Effet": "Prison autour des joueurs si traversé DO stasis et -1PO 2 tours", "Iteration": "nb de dégats et rall PO augmenté", "Placement": "Si P4, restez proche du boss"},
     12: {"Nom": "Ressac", "Passif": "1PA", "Effet": "DO eau et rall rési sur l'entité la plus affaibli", "Iteration": "+40 rall rési", "Placement": ""},
-    13: {"Nom": "Ouragan", "Passif": "+10% Armure donnée", "Effet": "Do air, attire de 2 cases", "Iteration": "+1 case attiré", "Placement": "  sauf si ordre artefact cringe alors stab si danger"},
+    13: {"Nom": "Ouragan", "Passif": "+10% Armure donnée", "Effet": "Do air, attire de 2 cases", "Iteration": "+1 case attiré", "Placement": "Stab si danger"},
     14: {"Nom": "Fracas", "Passif": "10% Df convertit en armure", "Effet": "Do terre, -1pm + stab", "Iteration": "rall PM +1", "Placement": " "},
-    15: {"Nom": "Explosion", "Passif": "10% armure reçu", "Effet": "Do terre anneau 4 - 6", "Iteration": "+1 PO max", "Placement": "Moins de 3 ou plus (6+Nb de tour)"},
+    15: {"Nom": "Explosion", "Passif": "10% armure reçu", "Effet": "Do terre anneau 4 - 6", "Iteration": "+1 PO max", "Placement": "Moins de 3 ou plus (6+Nb de tour de la phase)"},
     16: {"Nom": "Grondement", "Passif": "150% Berserk", "Effet": "invoque 2 rochers autour de Rushu détruire un rocher retire 2PM", "Iteration": "+2 rocher par tour", "Placement": " "},
 }
 
