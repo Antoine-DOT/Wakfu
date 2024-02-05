@@ -26,26 +26,45 @@ def update_checkboxes():
         else:
             checkbox.config(state=tk.NORMAL)
 
+    # Activer ou désactiver le bouton "Phase Suivante" en fonction du nombre de cases cochées
+    phase_button.config(state=tk.NORMAL if selected_count == 4 else tk.DISABLED)
+
+
 # Fonction pour afficher les sélections
 def show_selection():
-    # Efface les anciennes informations s'il en existe
     for widget in info_frame.pack_slaves():
         widget.destroy()
 
-    # Crée un sous-cadre pour chaque artefact sélectionné
-    for artefact_id, var, checkbox in artefact_checkboxes:
+    # Création de deux colonnes
+    left_column = tk.Frame(info_frame)
+    left_column.pack(side=tk.LEFT, fill='both', expand=True)
+
+    right_column = tk.Frame(info_frame)
+    right_column.pack(side=tk.RIGHT, fill='both', expand=True)
+
+    for i, (artefact_id, var, checkbox) in enumerate(artefact_checkboxes):
         if var.get() == 1:
             artefact = artefacts[artefact_id]
-            sub_frame = tk.Frame(info_frame, borderwidth=1, relief="solid")
+
+            # Choisir la colonne en fonction de l'indice
+            column = left_column if i % 2 == 0 else right_column
+
+            sub_frame = tk.Frame(column, borderwidth=1, relief="solid")
             sub_frame.pack(padx=5, pady=5, fill='x')
 
-            # Nom de l'artefact
             tk.Label(sub_frame, text=artefact['Nom'], font=("Arial", 12, "bold")).pack(anchor='w')
 
-            # Informations détaillées
-            tk.Label(sub_frame, text=f"Effet: {artefact['Effet']}").pack(anchor='w')
-            tk.Label(sub_frame, text=f"Iteration: {artefact['Iteration']}").pack(anchor='w')
-            tk.Label(sub_frame, text=f"Placement: {artefact['Placement']}").pack(anchor='w')
+            # Mettre en gras les titres
+            bold_font = ("Arial", 10, "bold")
+            tk.Label(sub_frame, text="Effet:", font=bold_font).pack(anchor='w')
+            tk.Label(sub_frame, text=artefact['Effet']).pack(anchor='w')
+
+            tk.Label(sub_frame, text="Itération:", font=bold_font).pack(anchor='w')
+            tk.Label(sub_frame, text=artefact['Iteration']).pack(anchor='w')
+
+            tk.Label(sub_frame, text="Placement:", font=bold_font).pack(anchor='w')
+            tk.Label(sub_frame, text=artefact['Placement']).pack(anchor='w')
+
 
 # Fonction pour gérer la phase
 def handle_phase():
@@ -84,20 +103,20 @@ def create_artefact_checkboxes():
 
 artefacts = {
     1: {"Nom": "Bond", "Passif": "+1PM", "Effet": "DO terre sur une cellule libre PO 4 - 6", "Iteration": "+1 po par tour", "Placement": " "},
-    2: {"Nom": "Saccage", "Passif": "+1PW début de tour", "Effet": "DO feu cercle de 1-2 sur l'entité la plus proche", "Iteration": "+1 joueur par tour", "Placement": "Plus de 2 cases des joueurs proches du boss"},
+    2: {"Nom": "Saccage", "Passif": "+1PW début de tour", "Effet": "DO feu cercle de 1-2 sur l'entité la plus proche", "Iteration": "+1 joueur par tour", "Placement": "Plus de 2 cases des joueurs proches de Rushu"},
     3: {"Nom": "Malédiction", "Passif": "150 Msoin", "Effet": "DO terre + 1 incurable sur le joueur le plus affaibli", "Iteration": "+1 niveau d'incurable par tour", "Placement": " "},
     4: {"Nom": "Cyclone", "Passif": "10% VdV", "Effet": "DO air, pousse le joueur de 2 cases", "Iteration": "+1 case par tour", "Placement": "Stab si danger"},
-    5: {"Nom": "Oblitération", "Passif": "100 Mdos", "Effet": "DO feu anneau de PO 13-30 autour de rushu", "Iteration": "Baisse la taille minimale de l'anneau de 1", "Placement": "13 - (Nb Tour de la phase) proche du boss"},
-    6: {"Nom": "Massacre", "Passif": "100 Mmonocible", "Effet": "Do feu en cercle 3 autour de rushu", "Iteration": "Augmente la taille du cercle de 1", "Placement": "3 + (nb tour de la phase) éloigné du boss"},
+    5: {"Nom": "Oblitération", "Passif": "100 Mdos", "Effet": "DO feu anneau de PO 13-30 autour de rushu", "Iteration": "Baisse la taille minimale de l'anneau de 1", "Placement": "Être à moins de 13 - (Nb Tour de la phase) cases de Rushu"},
+    6: {"Nom": "Massacre", "Passif": "100 Mmonocible", "Effet": "Do feu en cercle 3 autour de rushu", "Iteration": "Augmente la taille du cercle de 1", "Placement": " Être à plus de 3 + (nb tour de la phase) cases éloignées de Rushu"},
     7: {"Nom": "Dévastation", "Passif": "100 Mzone", "Effet": "Do feu anneau 5-8 autour de l'entité la plus proche de Rushu", "Iteration": "+1 joueur par tour", "Placement": "Moins de 5 ou plus de 8 des joueurs impactés"},
     8: {"Nom": "Météore", "Passif": "15 DF en ligne", "Effet": "Do Feu, pose un glyphe cercle de 3 sur 3 joueurs", "Iteration": "+1 taille et +1 joueur par tour", "Placement": "Ne pas se placer sur les glyphes"},
     9: {"Nom": "Grêle", "Passif": "100 Mmélée", "Effet": "Do eau sur l'entité la plus proche de rushu", "Iteration": "+1 entité par tour", "Placement": "Tank/invoc proche de Rushu"},
     10: {"Nom": "Tonnerre", "Passif": "100 Mdistance", "Effet": "Do air sur l'entité le plus éloigné de Rushu", "Iteration": "+1 entité par tour", "Placement": "Tank/invoc éloigné de Rushu"},
-    11: {"Nom": "Obscurité", "Passif": "15DF côté", "Effet": "Prison autour des joueurs si traversé DO stasis et -1PO 2 tours", "Iteration": "nb de dégats et rall PO augmenté", "Placement": "Si P4, restez proche du boss"},
+    11: {"Nom": "Obscurité", "Passif": "15DF côté", "Effet": "Prison autour des joueurs si traversé DO stasis et -1PO 2 tours", "Iteration": "nb de dégats et rall PO augmenté", "Placement": "Si vous devez taper, restez à environ 4 cases de Rushu"},
     12: {"Nom": "Ressac", "Passif": "1PA", "Effet": "DO eau et rall rési sur l'entité la plus affaibli", "Iteration": "+40 rall rési", "Placement": ""},
     13: {"Nom": "Ouragan", "Passif": "+10% Armure donnée", "Effet": "Do air, attire de 2 cases", "Iteration": "+1 case attiré", "Placement": "Stab si danger"},
     14: {"Nom": "Fracas", "Passif": "10% Df convertit en armure", "Effet": "Do terre, -1pm + stab", "Iteration": "rall PM +1", "Placement": " "},
-    15: {"Nom": "Explosion", "Passif": "10% armure reçu", "Effet": "Do terre anneau 4 - 6", "Iteration": "+1 PO max", "Placement": "Moins de 3 ou plus (6+Nb de tour de la phase)"},
+    15: {"Nom": "Explosion", "Passif": "10% armure reçu", "Effet": "Do terre si 4 - 6 de rushu", "Iteration": "+1 PO max", "Placement": "Moins de 3 ou plus de 6 (+nb de tour de la phase)"},
     16: {"Nom": "Grondement", "Passif": "150% Berserk", "Effet": "invoque 2 rochers autour de Rushu détruire un rocher retire 2PM", "Iteration": "+2 rocher par tour", "Placement": " "},
 }
 
@@ -112,8 +131,9 @@ phase_label.pack(fill='x')
 
 
 # Bouton pour gérer le changement de phase
-phase_button = tk.Button(root, text="Phase Suivante", command=handle_phase)
+phase_button = tk.Button(root, text="Phase Suivante", command=handle_phase, state=tk.DISABLED)
 phase_button.pack()
+
 
 # Bouton de réinitialisation qui redémarre l'application
 reset_button = tk.Button(root, text="Reset", command=restart_app)
